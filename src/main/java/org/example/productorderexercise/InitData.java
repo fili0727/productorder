@@ -1,24 +1,32 @@
 package org.example.productorderexercise;
 
+import org.example.productorderexercise.models.Order;
 import org.example.productorderexercise.models.OrderLine;
 import org.example.productorderexercise.models.Product;
 import org.example.productorderexercise.repository.OrderLineRepository;
+import org.example.productorderexercise.repository.OrderRepository;
 import org.example.productorderexercise.repository.ProductRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.time.Instant;
+import java.time.LocalDate;
+import java.util.List;
+
 @Component
 public class InitData implements CommandLineRunner {
 
     private ProductRepository productRepository;
     private OrderLineRepository orderLineRepository;
+    private OrderRepository orderRepository;
 
 
-    public InitData(ProductRepository productRepository, OrderLineRepository orderLineRepository){
+    public InitData(ProductRepository productRepository, OrderLineRepository orderLineRepository, OrderRepository orderRepository){
         this.productRepository = productRepository;
         this.orderLineRepository = orderLineRepository;
+        this.orderRepository = orderRepository;
     }
 
     public void run(String... args){
@@ -40,13 +48,19 @@ public class InitData implements CommandLineRunner {
         OrderLine line1 = new OrderLine();
         line1.setProduct(cucumber);
         line1.setQuantity(69);
-        orderLineRepository.save(line1);
+//        orderLineRepository.save(line1);
 
         OrderLine line2 = new OrderLine(cheese, 69);
-        orderLineRepository.save(line2);
+//        orderLineRepository.save(line2);
         OrderLine line3 = new OrderLine(cheese, 68);
-        orderLineRepository.save(line3);
+//        orderLineRepository.save(line3);
 
+
+        Order order = new Order(LocalDate.now() , true, List.of(line1,line2));
+        orderRepository.save(order);
+
+        Order order2 = new Order(LocalDate.now(), true, List.of(line3));
+        orderRepository.save(order2);
 
     }
 }
